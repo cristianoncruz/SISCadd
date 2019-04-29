@@ -1,0 +1,70 @@
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="SISCADD - Página de Login">
+        <meta name="author" content="Cristiano Cruz">
+
+        <title>SISCADD - Página de Login</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/siscadd.css' %}" rel="stylesheet">
+    </head>
+    <body class="login-body">
+        <!-- Content section -->
+        <section class="content">
+            <div class="main-content">
+                <div class="row">
+                    <div class="form-login-div">
+                        <div class="form-login-header">
+                            <span class="titulo-sistema-login">Sistema de Apoio às CADDs</span>
+                        </div>
+                        <div class="form-login-body">
+                            <form class="" method="post">
+                                {% csrf_token %}
+                                {% if messages %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {% for message in messages %}
+                                            {{ message }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-group ls-login-user">
+                                    <label for="username">Usuário:</label>
+                                    <input class="form-control ls-login-bg-user input-lg form-login-input" id="username" name="username" type="text" placeholder="Informe o usuário" required autofocus>
+                                </div>
+                                <div class="form-group ls-login-password">
+                                    <label for="password">Senha:   </label>
+                                    <input class="form-control ls-login-bg-password input-lg form-login-input" id="password" name="password" type="password" placeholder="Informe a senha" required>
+                                </div>
+                                <input type="submit" value="Entrar" class="btn botao-padrao botao-azul"><br />
+                                <a href="{% url 'accounts:usuario_registrar' %}" style="color: #000000; font-weight: bold">Cadastrar no Sistema</a><br />
+                                <a href="{% url 'password_reset' %}" style="color: #000000; font-weight: bold">Alterar a Senha</a>
+                            </form>
+                        </div>
+                        <div class="form-login-footer">
+                            <div style="text-align: left">
+                                <span class="font-size-7pt">Copyright &copy 2018 CEFET-RJ</span><br>
+                                <span class="font-size-7pt">Todos os direitos são reservados.</span>
+                            </div>
+                            <div>
+                                <img src="{% static 'img/cefet-logo.png'%}" width="120px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>

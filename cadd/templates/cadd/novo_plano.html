@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block body %}
+
+    <div class="main-content">
+        <nav>
+            <div class="nav nav-pills" id="pills-tab" role="tablist">
+                {% for a in abasperiodos %}
+                    {% if a.2 == prox_periodo %}
+                        <a class="nav-item nav-link active" id="pills-{{ a.2 }}-tab" data-toggle="pill" href="#pills-{{ a.2 }}" role="tab" aria-controls="pills-{{ a.2 }}" aria-selected="true">{{ a.2 }}</a>
+                    {% else %}
+                        <a class="nav-item nav-link" id="pills-{{ a.2 }}-tab" data-toggle="tab" href="#pills-{{ a.2 }}" role="tab" aria-controls="pills-{{ a.2 }}" aria-selected="false">{{ a.2 }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </nav>
+        <div class="tab-content mt-2" id="pills-tabContent">
+            {% for a in abasperiodos %}
+                {% if a.2 == prox_periodo %}
+                {% else %}
+                    <div class="tab-pane fade" id="pills-{{ a.2 }}" role="tabpanel" aria-labelledby="pills-{{ a.2 }}-tab">...Teste {{ a.2 }}</div>
+                {% endif %}
+            {% endfor %}
+            <div class="tab-pane fade show active" id="pills-{{ prox_periodo }}" role="tabpanel" aria-labelledby="pills-{{ prox_periodo }}-tab">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="col-11 cabecalho-quadros">
+                                <span>Prévia de Horários < {{ prox_periodo }} ></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="accordion" class="col-11p">
+                                <!-- SEGUNDA-FEIRA -->
+                                <div class="card">
+                                    <div class="card-header" id="headingSegundaFeira">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#segcard" aria-expanded="true" aria-controls="segcard">
+                                            <span class="card-header-text"> Segunda-Feira </span>
+                                        </button>
+                                    </div>
+                                    <div id="segcard" class="collapse show" aria-labelledby="headingSegundaFeira" data-parent="#accordion">
+                                        <div class="card-body-previas card-body" id="seg">
+                                            {% for d in disciplinas_pendentes %}
+                                                {% if d.diasemana == 1 %}
+                                                    <div class="row disciplina-previa" id="{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}">
+                                                        <div class="col-11 disciplina-previa-detalhes">
+                                                            <div class="detalhes-completos">
+                                                                <span class="disciplina-previa-nome"
+                                                                      tabindex="0"
+                                                                      data-toggle="popover"
+                                                                      title="
+                                                                      <div class='row'>
+                                                                        <div class='col-10 disciplina-header'> {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}</div>
+                                                                        <div class='col-2'><div class='btn'><img src='{% static '/img/close.svg' %}' width='20px'></div></div>
+                                                                      </div>"
+                                                                      data-content="
+                                                                      <span class='popover-label-codigo'>CÓDIGO: </span>
+                                                                      <span class='popover-codigo'>{{ d.disciplina.codigo }}</span><br />
+                                                                      <span class='popover-label-inicio'>INICIA: </span>
+                                                                      <span class='popover-inicio'>{{ d.inicio }} </span><br />
+                                                                      <span class='popover-label-termino'>TERMINA: </span>
+                                                                      <span class='popover-termino'>{{ d.fim }} </span><br />
+                                                                      <span class='popover-label-professor'>PROFESSOR(A): </span>
+                                                                      <span class='popover-professor'>{{ d.professor.nome }}</span><br />
+                                                                      <span class='popover-label-creditos'>CRÉDITOS: </span>
+                                                                      <span class='popover-creditos'>{{ d.disciplina.quantidadecreditos }}</span>
+                                                                      <div class='popover-footer'>
+                                                                      <div class='row'>
+                                                                        <div class='col-4'><div class='btn'><img src='{% static '/img/return.png' %}' title='Excluir' width='25px' ></div></div>
+                                                                        <div class='col-5'></div>
+                                                                        <div class='col-3'></div>
+                                                                      </div>
+                                                                      </div>
+                                                                      "
+                                                                >
+                                                                    {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}
+                                                                </span>
+                                                                <div class="detalhes-nao-exibir-calendario-plano">
+                                                                    <div class="detalhes-nao-exibir-quadro-previa">
+                                                                        <span class="disciplina-previa-label-codigo">Código: </span>
+                                                                        <span class="disciplina-previa-codigo">{{ d.disciplina.codigo }}</span>
+                                                                        <span class="disciplina-previa-horario-inicio">{{ d.inicio }} </span>
+                                                                        <span class="disciplina-previa-horario-termino">{{ d.fim }}</span>
+                                                                        <span class="disciplina-previa-label-professor">Prof: </span>
+                                                                        <span class="disciplina-previa-professor">{% filter force_escape|upper %}{{ d.professor.nome }}{% endfilter %}</span>
+                                                                        <span class="disciplina-previa-label-desc">Descrição: </span>
+                                                                        <span class="disciplina-previa-desc">{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}</span>
+                                                                        <span class="disciplina-previa-label-creditos">Créditos: </span>
+                                                                        <span class="disciplina-previa-creditos">{{ d.disciplina.quantidadecreditos }}</span>
+                                                                        <span class="disciplina-previa-id">{{ d.id }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <div class="col-1 disciplina-previa-add" onclick="addDisciplina(event)"></div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- TERÇA-FEIRA -->
+                                <div class="card">
+                                    <div class="card-header" id="headingTercaFeira">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#tercard" aria-expanded="true" aria-controls="tercard">
+                                            <span class="card-header-text"> Terça-Feira </span>
+                                        </button>
+                                    </div>
+                                    <div id="tercard" class="collapse" aria-labelledby="headingTercaFeira" data-parent="#accordion">
+                                        <div class="card-body-previas card-body" id="ter">
+                                            {% for d in disciplinas_pendentes %}
+                                                {% if d.diasemana == 2 %}
+                                                    <div class="row disciplina-previa" id="{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}">
+                                                        <div class="col-11 disciplina-previa-detalhes">
+                                                            <div class="detalhes-completos">
+                                                                <span class="disciplina-previa-nome"
+                                                                    tabindex="0"
+                                                                    data-toggle="popover"
+                                                                    title="
+                                                                    <div class='row'>
+                                                                    <div class='col-10 disciplina-header'> {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}</div>
+                                                                    <div class='col-2'><div class='btn'><img src='{% static '/img/close.svg' %}' width='20px'></div></div>
+                                                                    </div>"
+                                                                    data-content="
+                                                                    <span class='popover-label-codigo'>CÓDIGO: </span>
+                                                                    <span class='popover-codigo'>{{ d.disciplina.codigo }}</span><br />
+                                                                    <span class='popover-label-inicio'>INICIA: </span>
+                                                                    <span class='popover-inicio'>{{ d.inicio }} </span><br />
+                                                                    <span class='popover-label-termino'>TERMINA: </span>
+                                                                    <span class='popover-termino'>{{ d.fim }} </span><br />
+                                                                    <span class='popover-label-professor'>PROFESSOR(A): </span>
+                                                                    <span class='popover-professor'>{{ d.professor.nome }}</span><br />
+                                                                    <span class='popover-label-creditos'>CRÉDITOS: </span>
+                                                                    <span class='popover-creditos'>{{ d.disciplina.quantidadecreditos }}</span>
+                                                                    <div class='popover-footer'>
+                                                                    <div class='row'>
+                                                                    <div class='col-4'><div class='btn'><img src='{% static '/img/return.png' %}' title='Excluir' width='25px' ></div></div>
+                                                                    <div class='col-5'></div>
+                                                                    <div class='col-3'></div>
+                                                                    </div>
+                                                                    </div>
+                                                                    "
+                                                                    >
+                                                                    {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}
+                                                                </span>
+                                                                <div class="detalhes-nao-exibir-calendario-plano">
+                                                                    <div class="detalhes-nao-exibir-quadro-previa">
+                                                                        <span class="disciplina-previa-label-codigo">Código: </span>
+                                                                        <span class="disciplina-previa-codigo">{{ d.disciplina.codigo }}</span>
+                                                                        <span class="disciplina-previa-horario-inicio">{{ d.inicio }} </span>
+                                                                        <span class="disciplina-previa-horario-termino">{{ d.fim }}</span>
+                                                                        <span class="disciplina-previa-label-professor">Prof: </span>
+                                                                        <span class="disciplina-previa-professor">{% filter force_escape|upper %}{{ d.professor.nome }}{% endfilter %}</span>
+                                                                        <span class="disciplina-previa-label-desc">Descrição: </span>
+                                                                        <span class="disciplina-previa-desc">{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}</span>
+                                                                        <span class="disciplina-previa-label-creditos">Créditos: </span>
+                                                                        <span class="disciplina-previa-creditos">{{ d.disciplina.quantidadecreditos }}</span>
+                                                                        <span class="disciplina-previa-id">{{ d.id }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <div class="col-1 disciplina-previa-add" onclick="addDisciplina(event)"></div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- QUARTA-FEIRA -->
+                                <div class="card">
+                                    <div class="card-header" id="headingQuartaFeira">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#quacard" aria-expanded="true" aria-controls="quacard">
+                                            <span class="card-header-text"> Quarta-Feira </span>
+                                        </button>
+                                    </div>
+                                    <div id="quacard" class="collapse" aria-labelledby="headingQuartaFeira" data-parent="#accordion">
+                                        <div class="card-body-previas card-body" id="ter">
+                                            {% for d in disciplinas_pendentes %}
+                                            {% if d.diasemana == 3 %}
+                                                <div class="row disciplina-previa" id="{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}">
+                                                    <div class="col-11 disciplina-previa-detalhes">
+                                                        <div class="detalhes-completos">
+                                                            <span class="disciplina-previa-nome"
+                                                                tabindex="0"
+                                                                data-toggle="popover"
+                                                                title="
+                                                                <div class='row'>
+                                                                    <div class='col-10 disciplina-header'> {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}</div>
+                                                                    <div class='col-2'><div class='btn'><img src='{% static '/img/close.svg' %}' width='20px'></div></div>
+                                                                </div>"
+                                                                data-content="
+                                                                <span class='popover-label-codigo'>CÓDIGO: </span>
+                                                                <span class='popover-codigo'>{{ d.disciplina.codigo }}</span><br />
+                                                                <span class='popover-label-inicio'>INICIA: </span>
+                                                                <span class='popover-inicio'>{{ d.inicio }} </span><br />
+                                                                <span class='popover-label-termino'>TERMINA: </span>
+                                                                <span class='popover-termino'>{{ d.fim }} </span><br />
+                                                                <span class='popover-label-professor'>PROFESSOR(A): </span>
+                                                                <span class='popover-professor'>{{ d.professor.nome }}</span><br />
+                                                                <span class='popover-label-creditos'>CRÉDITOS: </span>
+                                                                <span class='popover-creditos'>{{ d.disciplina.quantidadecreditos }}</span>
+                                                                <div class='popover-footer'>
+                                                                <div class='row'>
+                                                                    <div class='col-4'><div class='btn'><img src='{% static '/img/return.png' %}' title='Excluir' width='25px' ></div></div>
+                                                                    <div class='col-5'></div>
+                                                                    <div class='col-3'></div>
+                                                                </div>
+                                                            </div>"
+                                                            >
+                                                                {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}
+                                                            </span>
+                                                            <div class="detalhes-nao-exibir-calendario-plano">
+                                                                <div class="detalhes-nao-exibir-quadro-previa">
+                                                                    <span class="disciplina-previa-label-codigo">Código: </span>
+                                                                    <span class="disciplina-previa-codigo">{{ d.disciplina.codigo }}</span>
+                                                                    <span class="disciplina-previa-horario-inicio">{{ d.inicio }} </span>
+                                                                    <span class="disciplina-previa-horario-termino">{{ d.fim }}</span>
+                                                                    <span class="disciplina-previa-label-professor">Prof: </span>
+                                                                    <span class="disciplina-previa-professor">{% filter force_escape|upper %}{{ d.professor.nome }}{% endfilter %}</span>
+                                                                    <span class="disciplina-previa-label-desc">Descrição: </span>
+                                                                    <span class="disciplina-previa-desc">{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}</span>
+                                                                    <span class="disciplina-previa-label-creditos">Créditos: </span>
+                                                                    <span class="disciplina-previa-creditos">{{ d.disciplina.quantidadecreditos }}</span>
+                                                                    <span class="disciplina-previa-id">{{ d.id }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-1 disciplina-previa-add" onclick="addDisciplina(event)"></div>
+                                                </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- QUINTA-FEIRA -->
+                                <div class="card">
+                                    <div class="card-header" id="headingQuintaFeira">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#quicard" aria-expanded="true" aria-controls="quicard">
+                                            <span class="card-header-text"> Quinta-Feira </span>
+                                        </button>
+                                    </div>
+                                    <div id="quicard" class="collapse" aria-labelledby="headingQuintaFeira" data-parent="#accordion">
+                                        <div class="card-body-previas card-body" id="qui">
+                                            {% for d in disciplinas_pendentes %}
+                                            {% if d.diasemana == 4 %}
+                                                <div class="row disciplina-previa" id="{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}">
+                                                    <div class="col-11 disciplina-previa-detalhes">
+                                                        <div class="detalhes-completos">
+                                                            <span class="disciplina-previa-nome"
+                                                                  tabindex="0"
+                                                                  data-toggle="popover"
+                                                                  title="
+                                                                      <div class='row'>
+                                                                          <div class='col-10 disciplina-header'> {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}</div>
+                                                                          <div class='col-2'><div class='btn'><img src='{% static '/img/close.svg' %}' width='20px'></div></div>
+                                                                      </div>"
+                                                                  data-content="
+                                                                      <span class='popover-label-codigo'>CÓDIGO: </span>
+                                                                      <span class='popover-codigo'>{{ d.disciplina.codigo }}</span><br />
+                                                                      <span class='popover-label-inicio'>INICIA: </span>
+                                                                      <span class='popover-inicio'>{{ d.inicio }} </span><br />
+                                                                      <span class='popover-label-termino'>TERMINA: </span>
+                                                                      <span class='popover-termino'>{{ d.fim }} </span><br />
+                                                                      <span class='popover-label-professor'>PROFESSOR(A): </span>
+                                                                      <span class='popover-professor'>{{ d.professor.nome }}</span><br />
+                                                                      <span class='popover-label-creditos'>CRÉDITOS: </span>
+                                                                      <span class='popover-creditos'>{{ d.disciplina.quantidadecreditos }}</span>
+                                                                      <div class='popover-footer'>
+                                                                      <div class='row'>
+                                                                          <div class='col-4'><div class='btn'><img src='{% static '/img/return.png' %}' title='Excluir' width='25px' ></div></div>
+                                                                              <div class='col-5'></div>
+                                                                              <div class='col-3'></div>
+                                                                          </div>
+                                                                      </div>
+                                                                  ">
+                                                                {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}
+                                                            </span>
+                                                            <div class="detalhes-nao-exibir-calendario-plano">
+                                                                <div class="detalhes-nao-exibir-quadro-previa">
+                                                                    <span class="disciplina-previa-label-codigo">Código: </span>
+                                                                    <span class="disciplina-previa-codigo">{{ d.disciplina.codigo }}</span>
+                                                                    <span class="disciplina-previa-horario-inicio">{{ d.inicio }} </span>
+                                                                    <span class="disciplina-previa-horario-termino">{{ d.fim }}</span>
+                                                                    <span class="disciplina-previa-label-professor">Prof: </span>
+                                                                    <span class="disciplina-previa-professor">{% filter force_escape|upper %}{{ d.professor.nome }}{% endfilter %}</span>
+                                                                    <span class="disciplina-previa-label-desc">Descrição: </span>
+                                                                    <span class="disciplina-previa-desc">{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}</span>
+                                                                    <span class="disciplina-previa-label-creditos">Créditos: </span>
+                                                                    <span class="disciplina-previa-creditos">{{ d.disciplina.quantidadecreditos }}</span>
+                                                                    <span class="disciplina-previa-id">{{ d.id }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-1 disciplina-previa-add" onclick="addDisciplina(event)"></div>
+                                                </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- SEXTA-FEIRA -->
+                                <div class="card">
+                                    <div class="card-header" id="headingSextaFeira">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#sexcard" aria-expanded="true" aria-controls="sexcard">
+                                            <span class="card-header-text"> Sexta-Feira </span>
+                                        </button>
+                                    </div>
+                                    <div id="sexcard" class="collapse" aria-labelledby="headingSextaFeira" data-parent="#accordion">
+                                        <div class="card-body-previas card-body" id="sex">
+                                            {% for d in disciplinas_pendentes %}
+                                            {% if d.diasemana == 4 %}
+                                                <div class="row disciplina-previa" id="{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}">
+                                                    <div class="col-11 disciplina-previa-detalhes">
+                                                        <div class="detalhes-completos">
+                                                            <span class="disciplina-previa-nome"
+                                                                tabindex="0"
+                                                                data-toggle="popover"
+                                                                title="
+                                                                    <div class='row'>
+                                                                        <div class='col-10 disciplina-header'> {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}</div>
+                                                                        <div class='col-2'><div class='btn'><img src='{% static '/img/close.svg' %}' width='20px'></div></div>
+                                                                    </div>"
+                                                                data-content="
+                                                                <span class='popover-label-codigo'>CÓDIGO: </span>
+                                                                <span class='popover-codigo'>{{ d.disciplina.codigo }}</span><br />
+                                                                <span class='popover-label-inicio'>INICIA: </span>
+                                                                <span class='popover-inicio'>{{ d.inicio }} </span><br />
+                                                                <span class='popover-label-termino'>TERMINA: </span>
+                                                                <span class='popover-termino'>{{ d.fim }} </span><br />
+                                                                <span class='popover-label-professor'>PROFESSOR(A): </span>
+                                                                <span class='popover-professor'>{{ d.professor.nome }}</span><br />
+                                                                <span class='popover-label-creditos'>CRÉDITOS: </span>
+                                                                <span class='popover-creditos'>{{ d.disciplina.quantidadecreditos }}</span>
+                                                                <div class='popover-footer'>
+                                                                <div class='row'>
+                                                                <div class='col-4'><div class='btn'><img src='{% static '/img/return.png' %}' title='Excluir' width='25px' ></div></div>
+                                                                <div class='col-5'></div>
+                                                                <div class='col-3'></div>
+                                                                </div>
+                                                                </div>
+                                                                "
+                                                                >
+                                                                {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}
+                                                            </span>
+                                                            <div class="detalhes-nao-exibir-calendario-plano">
+                                                                <div class="detalhes-nao-exibir-quadro-previa">
+                                                                    <span class="disciplina-previa-label-codigo">Código: </span>
+                                                                    <span class="disciplina-previa-codigo">{{ d.disciplina.codigo }}</span>
+                                                                    <span class="disciplina-previa-horario-inicio">{{ d.inicio }} </span>
+                                                                    <span class="disciplina-previa-horario-termino">{{ d.fim }}</span>
+                                                                    <span class="disciplina-previa-label-professor">Prof: </span>
+                                                                    <span class="disciplina-previa-professor">{% filter force_escape|upper %}{{ d.professor.nome }}{% endfilter %}</span>
+                                                                    <span class="disciplina-previa-label-desc">Descrição: </span>
+                                                                    <span class="disciplina-previa-desc">{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}</span>
+                                                                    <span class="disciplina-previa-label-creditos">Créditos: </span>
+                                                                    <span class="disciplina-previa-creditos">{{ d.disciplina.quantidadecreditos }}</span>
+                                                                    <span class="disciplina-previa-id">{{ d.id }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-1 disciplina-previa-add" onclick="addDisciplina(event)"></div>
+                                                </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- OUTROS -->
+                                <div class="card">
+                                    <div class="card-header" id="headingOutros">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#outros" aria-expanded="true" aria-controls="outros">
+                                            <span class="card-header-text"> Outros </span>
+                                        </button>
+                                    </div>
+                                    <div id="outros" class="collapse" aria-labelledby="headingOutros" data-parent="#accordion">
+                                        <div class="card-body-previas card-body" id="out">
+                                            {% for d in disciplinas_pendentes %}
+                                            {% if d.diasemana == 7 or d.diasemana == 8 %}
+                                            <div class="row disciplina-previa" id="{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}">
+                                                <div class="col-11 disciplina-previa-detalhes">
+                                                    <div class="detalhes-completos">
+                                                        <span class="disciplina-previa-nome"
+                                                              tabindex="0"
+                                                              data-toggle="popover"
+                                                              title="
+                                                                  <div class='row'>
+                                                                    <div class='col-10 disciplina-header'> {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}</div>
+                                                                    <div class='col-2'><div class='btn'><img src='{% static '/img/close.svg' %}' width='20px'></div></div>
+                                                                  </div>"
+                                                              data-content="
+                                                              <span class='popover-label-codigo'>CÓDIGO: </span>
+                                                              <span class='popover-codigo'>{{ d.disciplina.codigo }}</span><br />
+                                                              <span class='popover-label-inicio'>INICIA: </span>
+                                                              <span class='popover-inicio'>{{ d.inicio }} </span><br />
+                                                              <span class='popover-label-termino'>TERMINA: </span>
+                                                              <span class='popover-termino'>{{ d.fim }} </span><br />
+                                                              <span class='popover-label-professor'>PROFESSOR(A): </span>
+                                                              <span class='popover-professor'>{{ d.professor.nome }}</span><br />
+                                                              <span class='popover-label-creditos'>CRÉDITOS: </span>
+                                                              <span class='popover-creditos'>{{ d.disciplina.quantidadecreditos }}</span>
+                                                              <div class='popover-footer'>
+                                                              <div class='row'>
+                                                                <div class='col-4'><div class='btn'><img src='{% static '/img/return.png' %}' title='Excluir' width='25px' ></div></div>
+                                                                <div class='col-5'></div>
+                                                                <div class='col-3'></div>
+                                                              </div>
+                                                              </div>
+                                                              "
+                                                            >
+                                                            {% filter force_escape|upper %}{{ d.disciplina.nome }}{% endfilter %}
+                                                        </span>
+                                                        <div class="detalhes-nao-exibir-calendario-plano">
+                                                            <div class="detalhes-nao-exibir-quadro-previa">
+                                                                <span class="disciplina-previa-label-codigo">Código: </span>
+                                                                <span class="disciplina-previa-codigo">{{ d.disciplina.codigo }}</span>
+                                                                <span class="disciplina-previa-horario-inicio">{{ d.inicio }} </span>
+                                                                <span class="disciplina-previa-horario-termino">{{ d.fim }}</span>
+                                                                <span class="disciplina-previa-label-professor">Prof: </span>
+                                                                <span class="disciplina-previa-professor">{% filter force_escape|upper %}{{ d.professor.nome }}{% endfilter %}</span>
+                                                                <span class="disciplina-previa-label-desc">Descrição: </span>
+                                                                <span class="disciplina-previa-desc">{{ d.disciplina.codigo }}{{ d.inicio|time:'Hi' }}</span>
+                                                                <span class="disciplina-previa-label-creditos">Créditos: </span>
+                                                                <span class="disciplina-previa-creditos">{{ d.disciplina.quantidadecreditos }}</span>
+                                                                <span class="disciplina-previa-id">{{ d.id }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-1 disciplina-previa-add" onclick="addDisciplina(event)"></div>
+                                            </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-11 cabecalho-disciplinas">
+                                <span>Plano Baseado na Prévia de Horários</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-11p quadro div-calendario-disciplinas">
+                                <div class="row div-calendario-disciplinas-cabecalho">
+                                    <div class="col-2 div-calendario-disciplinas-cabecalho-itens">SEGUNDA</div>
+                                    <div class="col-2 div-calendario-disciplinas-cabecalho-itens">TERÇA</div>
+                                    <div class="col-2 div-calendario-disciplinas-cabecalho-itens">QUARTA</div>
+                                    <div class="col-2 div-calendario-disciplinas-cabecalho-itens">QUINTA</div>
+                                    <div class="col-2 div-calendario-disciplinas-cabecalho-itens">SEXTA</div>
+                                    <div class="col-2 div-calendario-disciplinas-cabecalho-itens">OUTROS</div>
+                                </div>
+                                <div class="row div-calendario-disciplinas-corpo">
+                                    <div class="col-2 div-calendario-disciplinas-corpo-itens pt-2 pb-2" id="tb_seg"></div>
+                                    <div class="col-2 div-calendario-disciplinas-corpo-itens pt-2 pb-2" id="tb_ter"></div>
+                                    <div class="col-2 div-calendario-disciplinas-corpo-itens pt-2 pb-2" id="tb_qua"></div>
+                                    <div class="col-2 div-calendario-disciplinas-corpo-itens pt-2 pb-2" id="tb_qui"></div>
+                                    <div class="col-2 div-calendario-disciplinas-corpo-itens pt-2 pb-2" id="tb_sex"></div>
+                                    <div class="col-2 div-calendario-disciplinas-corpo-itens pt-2 pb-2" id="tb_out"></div>
+                                </div>
+                                <div class="mt-2 ml-2">
+                                    <a href="{% url 'cadd:lista_planos' %}" class="btn botao-padrao">Voltar</a>
+                                    <button type="button" class="btn botao-padrao botao-azul" data-toggle="modal" data-target="#SalvarPreviaModal">
+                                        Salvar Plano de Estudos
+                                    </button>
+                                    {% if continua %}
+                                        <a href="{% url 'cadd:novo_plano_futuro' %}" class="btn botao-padrao botao-verde">Passar a etapa 2</a>
+                                    {% else %}
+                                        <a href="#" class="btn botao-padrao botao-desabilitado">Passar a etapa 2</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <!-- Modal Windows -->
+                            <div class="modal fade" id="SalvarPreviaModal" tabindex="-1" role="dialog" aria-labelledby="SalvarPreviaModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="SalvarPreviaModalLabel">Confirmar Salvamento do Plano</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Tem certeza que deseja salvar e sobescrever o plano salvo anteriormente?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form class="" action="" method="post">
+                                            {% csrf_token %}
+                                                <input type="hidden" id="discip" name="discip">
+                                                <div id="salvar-previa">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
